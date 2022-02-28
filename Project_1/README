@@ -1,0 +1,58 @@
+PUIU SEBASTIAN-ANDREI
+		324CD
+
+In cadrul acestei teme, pentru inceput, am realizat parsarea tabelei de rutare. 
+Dupa aceea, am sortat toate elementele tabelei dupa campul 'prefix', pentru a 
+le putea avea in ordine. In continuare, am realizat o mapare, prin intermediul 
+careia voi putea accesa mai rapid orice camp din tabela, in functie de numarul 
+de biti setati pe 1 din masca sa.
+Pentru urmatorul pas, am verificat tipul pachetului primit. Daca acesta era de 
+tip ARP, am luat in considerare doua cazuri. Primul caz este reprezentat de 
+posibilitatea ca acesta sa fie un request. Prin urmare, m-am asigurat ca acesta 
+a fost destinat router-ului si i-am trimis adresa sa mac host-ului ce a cerut-o. 
+Daca acesta nu a fost destinat router-ului, am ignorat pachetul. Cel de-al 
+doilea caz este reprezentat de momentul in care se primeste un reply. Prima 
+actiunea efectuata aici este de a da update la table arp. Daca primeste adresa 
+mac pentru o adresa ce nu se regaseste in tabela arp, atunci aceasta trebuie 
+adaugata. Altfel, doar va fi reactualizata adresa mac existenta. Dupa primirea 
+acestei informatii, trebuie trimise mai departe pachetele ce au ramas in coada 
+de asteptare, router-ul nestiind initial unde sa le dirijeze. Prin urmare, am 
+luat fiecare pachet din coada si l-am trecut prin pasii de forwarding: am cautat 
+cea mai buna ruta, am extras intrarea arp, am actualizat informatiile din 
+header-ul ethernet si am dat send la pachet. De asemenea, cazurile speciale au 
+fost tratate si le voi explica in randurile ce urmeaza.
+Daca pachetul primit la inceput nu era de tip ARP, atunci inseamna ca era de 
+tip IP. Am verificat mai intai daca este destinat router-ului si daca este 
+un ICMP (mai exact un ICMP echo), iar in caz afirmativ, i-am trimis expeditorului 
+initial un pachet de tip ICMP echo_reply. In cazul in care acest pachet nu era 
+destinat router-ului, inseamna ca el trebuie trimis mai departe, procesul fiind 
+asemanator cu cel de la ARP request. De aceasta data, fiind pentru prima oara 
+venit pachetul, i-am verificat TTL-ul si checksum-ul, pentru a ma asigura ca 
+este totul in regula cu el (in cazul in care a fost alterat continutul sau nu 
+respecta conditia TTL-ului minim, pachetul este aruncat sau este trimis un 
+pachet de tip ICMP error 'time_exceeded', prin care expeditorului ii va fi 
+semnalat ca a fost depasit timpul de calatorie alocat pachetului respectiv). 
+Dupa care, i-am actualizat aceste informatii, i-am cautat cea mai buna ruta, 
+am gasit intrarea ARP corespunzatoare, am actualizat informatiile din header-ul 
+ethernet si in final am trimis pachetul mai departe. Insa, in cadrul acestui 
+proces, au mai fost luate in calcul doua posibilitati, precum si in cazul celui 
+de la ARP request. Posibilitatea este este reprezentata de faptul ca exista o 
+sansa ca nicio ruta sa nu fi fost gasita. In acest caz, este trimis un pachet 
+de tip ICMP error 'destination_unreachable', prin care expeditorului ii va fi 
+semnalat ca destinatia nu poate fi atinsa. De asemenea, exista si situatia in 
+care este gasita cea mai buna ruta, insa nu exista un ARP entry. In acest caz, 
+pachetul va fi adaugat intr-o coada, iar router-ul va trimite ARP request ca 
+broadcast pentru a afla adresa mac necesara, urmand sa primeasca un reply.
+Pentru a gasi mereu cea mai buna ruta, m-am folosit de faptul ca am clasificat 
+inca de la parsare toate adresele in functie de mastile lor, acestea fiind si 
+sortate. Mereu se porneste de la masca de 32 de biti setati pe 1 si se continua 
+descrescator pana se ajunge la cea de 0 biti setati pe 1. Astfel, se asigura 
+faptul ca mereu primul match va fi si cel ce respecta 'the longest prefix', 
+cautarea putand sa se sfarseasca in acel moment. Prin urmare, cat timp nu a fost 
+gasit un match pentru adresa, am realizat cautari binare printre adresele tabelei 
+de rutare, in felul descris mai sus. Astfel, complexitatea algoritmului de cautare 
+a celei mai bune rute va avea complexitatea x * O(log n), unde x ia valori din 
+multimea {1,2,..32}, intrucat complexitatea cautarii binare este chiar O(log n) 
+si pot fi efectuate intre 1 si 32 de astfel de cautari, in functie de masca ce va 
+determina cea mai lunga potrivire de prefix.
+
