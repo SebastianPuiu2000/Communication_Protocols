@@ -1,0 +1,73 @@
+Puiu Sebastian-Andrei
+	324CD
+
+
+In cadrul acestei teme am implementat un client scris in C care sa interactioneze 
+cu un REST API. Mai intai, am realizat un centru de comanda, care accepta urmtoarele 
+comenzi: 'register', 'login', 'enter_library', 'add_book', 'get_books', 'get_book', 
+'delete_book' si 'exit'. In cazul in care comanda data de client nu se regaseste 
+printre acestea, va fi afisat un mesaj de eroare si vor fi afisate toate comenzile 
+valide ce pot fi incercate. Pentru a putea porni/opri conexiunea cu serverul am 
+folosit functiile open_connection si close_connection, pe host: 34.118.48.238 si 
+port: 8080.
+Pentru comanda 'register', va fi nevoie de completarea campurilor 'username' si 
+'password' de catre client. Daca username-ul ales deja exista, se va intoarce un 
+mesaj de eroare, iar in caz contrar, unul de succes.
+Pentru comanda 'login', va fi nevoie de completarea campurilor 'username' si 
+'password' de catre client. Daca username-ul si parola nu se potrivesc, atunci 
+va fi afisat un mesaj de eroare. In caz contrar, va fi afisat un mesaj de succes, 
+urmat de cookie-ul pentru acea sesiune. Daca va exista vreo problema cand este primit 
+cookie-ul, va fi afisat un mesaj de eroare.
+Pentru comanda 'enter_library', am verificat mai intai daca client-ul a dat login, 
+prin existenta cookie-ului ce trebuie primit prin comanda descrisa anterior. In caz 
+afirmativ, se continua programul, iar in caz negativ va fi afisat un mesaj de eroare. 
+Pentru cazul afirmativ, va fi afisat un mesaj de succes, urmat de token-ul primit. 
+Daca va exista vreo problema la primirea token-ului, va fi afisat un mesaj de eroare.
+Pentru comanda 'get_books', am verificat mai intai daca client-ul are token-ul necesar 
+accesarii bibliotecii. In cazul in care nu are, va fi afisat un mesaj de eroare. In caz 
+contrar, va fi afisata lista ce contine cartile existente. Daca va exista vreo problema 
+la primirea lor, va fi afisat un mesaj de eroare. Daca lista este goala, clientul va 
+primi si o instiintare/avertizare cu privire la acest aspect.
+Pentru comanda 'get_book', va fi nevoie de completare campului 'id'. Am verificat mai 
+intai daca client-ul are token-ul necesar pentru accesarea bibliotecii. Daca nu il are, 
+va fi afisat un mesaj de eroare. In continuare, m-am asigurat de faptul ca id reprezinta 
+un numar valid. Pentru a fi un numar valid, acesta nu poate sa fie negativ. De asemenea, 
+el nu poate contine alte caractere in afara de cifrele 0-9, iar acest aspect a fost usor 
+verificat cu ajutorul tabelei ASCII. In cazul in care in urma verificarilor se constata 
+ca id nu reprezinta un numar valid, se afiseaza un mesaj de eroare. Daca acesta a fost 
+valid, se va afisa un mesaj de succes si vor fi returnate informatiile despre cartea in 
+cauza. Va fi afisat un mesaj de eroare doar in cazul in care a existat o problema la 
+primirea informatiilor sau daca nu exista in biblioteca nicio carte cu id-ul cerut.
+Pentru comanda 'delete_book', va fi nevoie de completare campului 'id'. Am verificat mai 
+intai daca client-ul are token-ul necesar pentru accesarea bibliotecii. Daca nu il are, 
+va fi afisat un mesaj de eroare. In continuare, m-am asigurat de faptul ca id reprezinta 
+un numar valid. Pentru a fi un numar valid, acesta nu poate sa fie negativ. De asemenea, 
+el nu poate contine alte caractere in afara de cifrele 0-9, iar acest aspect a fost usor 
+verificat cu ajutorul tabelei ASCII. In cazul in care in urma verificarilor se constata 
+ca id nu reprezinta un numar valid, se afiseaza un mesaj de eroare. Daca acesta a fost 
+valid, se va afisa un mesaj de succes si se va executa stergerea cartii in cauza. Va fi 
+afisat un mesaj de eroare doar in cazul in care a existat o problema legata de stergere 
+sau daca nu exista in biblioteca nicio carte cu id-ul cerut.
+Pentru comanda 'logout', am verificat mai intai daca client-ul a dat login, verificand 
+daca exista cookie-ul ce ar fi trebuit sa fie obtinut la comanda 'login'. In cazul in 
+care clientul nu daduse login, va fi afisat un mesaj de eroare. In cazul in care va 
+exista o problema de alta natura la logout, va fi afisat mesaj de eroare, iar in caz 
+contrar se va afisa un mesaj de succes. In caz de succes, se va tine cont ca user-ul 
+nu mai poate efectua ultimele comenzi descrise, intrucat cookie si token vor fi resetati.
+Pentru comanda 'exit', va fi realizata iesirea din aplicatie.
+
+Numele si argumentele pentru comenzi au fost respectate intocmai cum a fost descris in pdf. 
+Pentru buna interactionare cu serverul, am folosit biblioteca recomandata in pdf, si 
+anume biblioteca parson. Aceasta a fost extrasa de la urmatoarea adresa de github :
+https://github.com/kgabis/parson
+Din biblioteca parson m-am folosit in special de partea cu "serialization", intrucat am 
+avut nevoie de obiecte json cu ajutorul carora am obtinut output-urile de tip json necesare 
+pentru comunicarea cu serverul.
+In vederea realizarii temei, am folosit atat notiunile invatate in cadrul laboratorului 10, 
+cat si functiile implementate si primite in cadrul scheletului de laborator, acestea fiind 
+adaptate pentru cerintele curente (compute_get_request(), compute_post_request(), etc.).
+
+Feedback: Tema foarte interesanta, cerintele sunt bine explicate si este usor de inteles 
+ce trebuie facut. Daca a fost bine inteles laboratorul, nu pune multe dificultati si nu 
+necesita foarte mult timp. As fi apreciat un tutorial / cateva explicatii in pdf legate 
+de utilizarea postman.
