@@ -67,7 +67,3 @@ In vederea realizarii temei, am folosit atat notiunile invatate in cadrul labora
 cat si functiile implementate si primite in cadrul scheletului de laborator, acestea fiind 
 adaptate pentru cerintele curente (compute_get_request(), compute_post_request(), etc.).
 
-Feedback: Tema foarte interesanta, cerintele sunt bine explicate si este usor de inteles 
-ce trebuie facut. Daca a fost bine inteles laboratorul, nu pune multe dificultati si nu 
-necesita foarte mult timp. As fi apreciat un tutorial / cateva explicatii in pdf legate 
-de utilizarea postman.
